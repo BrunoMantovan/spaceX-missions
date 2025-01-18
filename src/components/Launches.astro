@@ -2,11 +2,27 @@
 import {getLaunches} from "../services/launches.ts"
 import CardLaunch from "./CardLaunch.astro";
 
-const launches = await getLaunches();
+const {currentPage} = Astro.props;
+
+let launches = await getLaunches(currentPage);
+const nextPage = parseInt(currentPage) + 1;
+const prevPage = parseInt(currentPage) - 1;
 ---
 
 <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
     {launches.map(launch => (
         <CardLaunch id={launch.id} img={launch.links.patch.small} details={launch.details} flightnumber={launch.flight_number} success={launch.success} />
     ))}
+
 </div>
+<div style="display: flex; gap: 1rem; margin-top: 1rem;">
+    {currentPage > 1 && (
+      <a href={`/${prevPage}`} style="padding: 0.5rem 1rem; background: lightblue; text-decoration: none;">
+        Previous
+      </a>
+    )}
+    <a href={`/${nextPage}`} style="padding: 0.5rem 1rem; background: lightblue; text-decoration: none;">
+        Next
+    </a>
+  </div>
+

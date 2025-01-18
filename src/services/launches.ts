@@ -1,6 +1,6 @@
 import {type Doc, type APIResponseSpaceX} from "../types/api.ts";
 
-export const getLaunches = async () => {
+export const getLaunches = async (page: number) => {
     const res = await fetch("https://api.spacexdata.com/v5/launches/query", {
         method: "POST",
         headers: {
@@ -11,10 +11,11 @@ export const getLaunches = async () => {
             options: {
                 sort: { date_unix: "asc" },
                 limit: 12,
+                page: page,
             },
         }),
     })
-    const {docs: launches} = await res.json() as APIResponseSpaceX;
+    const {docs: launches} = await res.json() as APIResponseSpaceX;    
     return launches
 }
 
