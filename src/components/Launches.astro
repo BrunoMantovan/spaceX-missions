@@ -1,28 +1,69 @@
 ---
-import {getLaunches} from "../services/launches.ts"
+import {getLaunches, getTotalLaunches} from "../services/launches.ts"
 import CardLaunch from "./CardLaunch.astro";
 
-const {currentPage} = Astro.props;
+const params = new URLSearchParams(Astro.request.url.split("?")[1])
+const currentPage = parseInt(params.get("page") || "1");
+const limit = parseInt(params.get("limit") || "12");
 
-let launches = await getLaunches(currentPage);
-const nextPage = parseInt(currentPage) + 1;
-const prevPage = parseInt(currentPage) - 1;
+const [launches, totalPages] = await Promise.all([
+  getLaunches(currentPage, limit),
+  getTotalLaunches(limit),
+]);
+
+const nextPage = currentPage + 1; 
+const prevPage = currentPage - 1;
+
+const generateUrl = (page: number, limit: number) => {
+
+  let url = page == 1 ? `/` : `/?page=${page}`;
+  if (page === 1 && limit !== 12) {
+    url += `?limit=${limit}`;
+  }else if(page !== 1 && limit !== 12){
+    url += `&limit=${limit}`
+  }
+  return url;
+};
 ---
 
 <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-    {launches.map(launch => (
-        <CardLaunch id={launch.id} img={launch.links.patch.small} details={launch.details} flightnumber={launch.flight_number} success={launch.success} />
-    ))}
-
+  {launches.map(launch => (
+      <CardLaunch id={launch.id} img={launch.links.patch.small} details={launch.details} flightnumber={launch.flight_number} success={launch.success} />
+  ))}
 </div>
-<div style="display: flex; gap: 1rem; margin-top: 1rem;">
-    {currentPage > 1 && (
-      <a href={`/${prevPage}`} style="padding: 0.5rem 1rem; background: lightblue; text-decoration: none;">
-        Previous
-      </a>
-    )}
-    <a href={`/${nextPage}`} style="padding: 0.5rem 1rem; background: lightblue; text-decoration: none;">
-        Next
+<div class="flex gap-4 mt-4 justify-center items-center">
+  {currentPage > 1 && (
+    <a href={generateUrl(1, limit)} class="py-4 px-2 mt-2 rounded" style="background-color: #6f8fa5;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="24" height="24" stroke-width="2">
+        <path d="M10 12l10 0"></path>
+        <path d="M10 12l4 4"></path>
+        <path d="M10 12l4 -4"></path>
+        <path d="M4 4l0 16"></path>
+      </svg>
     </a>
+  )}
+  {currentPage > 1 && (
+    <a href={generateUrl(prevPage, limit)} class="py-4 px-2 mt-2 rounded" style="background-color: #6f8fa5;">
+      Previous
+    </a>
+  )}
+  <div class="h-max">
+    <span>{totalPages}</span>
   </div>
+  {currentPage < 18 && (
+    <a href={generateUrl(nextPage, limit)} class="py-4 px-2 mt-2 rounded" style="background-color: #6f8fa5;">
+      Next
+    </a>
+  )}
+  {currentPage < 18 && (
+    <a href={generateUrl(totalPages, limit)} class="py-4 px-2 mt-2 rounded" style="background-color: #6f8fa5;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="24" height="24" stroke-width="2">
+        <path d="M14 12l-10 0"></path>
+        <path d="M14 12l-4 4"></path>
+        <path d="M14 12l-4 -4"></path>
+        <path d="M20 4l0 16"></path>
+      </svg>
+    </a>
+  )}
+</div>
 
