@@ -11,6 +11,8 @@ const [launches, totalPages] = await Promise.all([
   getTotalLaunches(limit),
 ]);
 
+const totalPagesNumber = totalPages ?? 1;
+
 const nextPage = currentPage + 1; 
 const prevPage = currentPage - 1;
 
@@ -25,33 +27,33 @@ const generateUrl = (page: number, limit: number) => {
   return url;
 };
 
-const generatePagination = (currentPage: number, totalPages: number) => {
+const generatePagination = (currentPage: number, totalPagesNumber: number) => {
   const pagination = [];
 
   pagination.push({ page: 1, label: "1" });
 
-  if (currentPage > 3 && totalPages > 4) {
+  if (currentPage > 3 && totalPagesNumber > 4) {
     pagination.push({ page: null, label: ". . ." });
   }
 
-  for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
-    if(currentPage === totalPages){pagination.push({ page: (totalPages - 2), label: `${totalPages - 2}`})}
+  for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPagesNumber - 1, currentPage + 1); i++) {
+    if(currentPage === totalPagesNumber && totalPagesNumber > 3){pagination.push({ page: (totalPagesNumber - 2), label: `${totalPagesNumber - 2}`})}
     pagination.push({ page: i, label: `${i}` });
-    if(currentPage === 1){pagination.push({ page: 3, label: "3"})}
+    if(currentPage === 1 && totalPagesNumber > 3){pagination.push({ page: 3, label: "3"})}
   }
 
-  if (currentPage < totalPages - 2 && totalPages > 4) {
+  if (currentPage < totalPagesNumber - 2 && totalPagesNumber > 4) {
     pagination.push({ page: null, label: ". . ." });
   }
 
-  if (totalPages > 3) {
-    pagination.push({ page: totalPages, label: `${totalPages}` });
+  if (totalPagesNumber > 1) {
+    pagination.push({ page: totalPagesNumber, label: `${totalPagesNumber}` });
   }
 
   return pagination;
 };
 
-const pagination = generatePagination(currentPage, totalPages);
+const pagination = generatePagination(currentPage, totalPagesNumber);
 ---
 
 <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -78,7 +80,7 @@ const pagination = generatePagination(currentPage, totalPages);
       </span>
     )
   ))}
-  {currentPage < totalPages && (
+  {currentPage < totalPagesNumber && (
     <a href={generateUrl(nextPage, limit)} class="py-4 px-2 mt-2 rounded w-10 h-10 flex justify-center items-center mx-1" style="background-color: #6f8fa5;">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="24" height="24" stroke-width="2"> <path d="M9 6l6 6l-6 6"></path> </svg> 
     </a>

@@ -26,26 +26,10 @@ export const getLaunchById = async ({id}: {id:string}) => {
 }
 
 export const getTotalLaunches = async (limit: number) => {
-    try {
-        const resServer = await fetch(`http://localhost:8080/paginated-data?limit=${limit}`);
-        if (resServer.ok) {
-            const data = await resServer.json();
-            return data.totalPages;
-        }
-    } catch (e) {
-        console.error("Error fetching from server, falling back to API:", e);
-    }
-
-    try {
         const resApi = await fetch("https://api.spacexdata.com/v5/launches");
         if (resApi.ok) {
             const launches = await resApi.json();
             return Math.ceil(launches.length / limit);
         }
-    } catch (e) {
-        console.error("Error fetching from SpaceX API:", e);
-    }
-
-    console.error("Both the server and SpaceX API failed.");
     return null;
 }
