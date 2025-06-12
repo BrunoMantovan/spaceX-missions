@@ -5,9 +5,10 @@ import CardLaunch from "./CardLaunch.astro";
 const params = new URLSearchParams(Astro.request.url.split("?")[1])
 const currentPage = parseInt(params.get("page") || "1");
 const limit = parseInt(params.get("limit") || "12");
+const sort = params.get("sort") || "asc"
 
 const [launches, totalPages] = await Promise.all([
-  getLaunches(currentPage, limit),
+  getLaunches(currentPage, limit, sort),
   getTotalLaunches(limit),
 ]);
 
@@ -16,14 +17,8 @@ const totalPagesNumber = totalPages ?? 1;
 const nextPage = currentPage + 1; 
 const prevPage = currentPage - 1;
 
-const generateUrl = (page: number, limit: number) => {
-
-  let url = page == 1 ? `/` : `/?page=${page}`;
-  if (page === 1 && limit !== 12) {
-    url += `?limit=${limit}`;
-  }else if(page !== 1 && limit !== 12){
-    url += `&limit=${limit}`
-  }
+const generateUrl = (page: number, limit: number, sort: string) => {
+  let url = `/?page=${page}&limit=${limit}&sort=${sort}`;
   return url;
 };
 
@@ -56,22 +51,44 @@ const generatePagination = (currentPage: number, totalPagesNumber: number) => {
 const pagination = generatePagination(currentPage, totalPagesNumber);
 ---
 
+<div class="mb-4">
+  <form method="GET" class="flex items-center space-x-4">
+    
+    <label for="sort" class="text-white font-medium">Orden:</label>
+    <select id="sort" name="sort" class="rounded-lg p-2 bg-gray-800 text-white">
+      <option value="asc" selected={sort === "asc"}>Ascendente</option>
+      <option value="desc" selected={sort === "desc"}>Descendente</option>
+    </select>
+
+    <label for="limit" class="text-white font-medium">Límite:</label>
+    <select id="limit" name="limit" class="rounded-lg p-2 bg-gray-800 text-white">
+      <option value="12" selected={limit === 12}>12</option>
+      <option value="24" selected={limit === 24}>24</option>
+      <option value="36" selected={limit === 36}>36</option>
+    </select>
+
+    <button type="submit" class="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700">
+      Aplicar
+    </button>
+  </form>
+</div>
+
 <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
   {launches.map(launch => (
-      <CardLaunch id={launch.id} img={launch.links.patch.small} details={launch.details} flightnumber={launch.flight_number} success={launch.success} />
+      <CardLaunch id={launch.id} img={launch.links.patch.small || launch.links.patch.large} details={launch.details} name={launch.name} success={launch.success} />
   ))}
 </div>
 <div class="flex gap-2 mt-4 justify-center items-center">
   {currentPage > 1 && (
-    <a href={generateUrl(prevPage, limit)} class="py-4 px-2 mt-2 rounded w-10 h-10 flex justify-center items-center mx-1" style="background-color: #6f8fa5;">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"      stroke-linejoin="round" width="24" height="24" stroke-width="2">
+    <a href={generateUrl(prevPage, limit, sort)} class="py-4 px-2 mt-2 rounded w-10 h-10 flex justify-center items-center mx-1" style="background-color: #6f8fa5;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="24" height="24" stroke-width="2">
         <path d="M15 6l-6 6l6 6"></path>
       </svg>
     </a>
   )}
   {pagination.map(({ page, label }) => (
     page ? (
-      <a href={generateUrl(page, limit)} class="py-4 px-2 mt-2 rounded w-10 h-10 flex justify-center items-center mx-1" style={`background-color: ${page === currentPage ? '#3b82f6' : '#6f8fa5'}`}>
+      <a href={generateUrl(page, limit, sort)} class="py-4 px-2 mt-2 rounded w-10 h-10 flex justify-center items-center mx-1" style={`background-color: ${page === currentPage ? "#0d9488" : '#6f8fa5'}`}>
         {label}
       </a>
         ) : (
@@ -81,7 +98,7 @@ const pagination = generatePagination(currentPage, totalPagesNumber);
     )
   ))}
   {currentPage < totalPagesNumber && (
-    <a href={generateUrl(nextPage, limit)} class="py-4 px-2 mt-2 rounded w-10 h-10 flex justify-center items-center mx-1" style="background-color: #6f8fa5;">
+    <a href={generateUrl(nextPage, limit, sort)} class="py-4 px-2 mt-2 rounded w-10 h-10 flex justify-center items-center mx-1" style="background-color: #6f8fa5;">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="24" height="24" stroke-width="2"> <path d="M9 6l6 6l-6 6"></path> </svg> 
     </a>
   )}

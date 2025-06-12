@@ -9,9 +9,19 @@ if (typeof id !== 'string') {
 }
 const launch = await getLaunchById({ id })
 
+
 ---
 <Layout title={launch.name}>
-  <article>
-    {launch.name}
+  <article class="flex items-start space-x-4 border-2 rounded-lg p-8 bg-gray-800 text-white">
+    <div class="mr-[1rem]">
+      <img src={launch?.links?.patch.small} alt={`No hay parche para el ${launch.name}`} class="max-w-[10rem] max-h-[10rem] object-contain"/>
+    </div>
+    <div>
+      <h2 class="text-4xl text-teal-600 font-bold">{launch.name}</h2>
+      <h3 class="text-xl mt-2  font-bold">Numero de vuelo: {launch.flight_number}</h3>
+      <div class="mt-4 text-lg">
+        <p>{launch?.details || "No hay detalles disponibles para este lanzamiento."}</p>
+      </div>
+    </div>
   </article>
 </Layout>

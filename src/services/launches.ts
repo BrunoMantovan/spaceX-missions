@@ -1,6 +1,6 @@
 import {type Doc, type APIResponseSpaceX} from "../types/api.ts";
 
-export const getLaunches = async (page: number, limit: number) => {
+export const getLaunches = async (page: number, limit: number, sort: string) => {
     const res = await fetch("https://api.spacexdata.com/v5/launches/query", {
         method: "POST",
         headers: {
@@ -9,7 +9,7 @@ export const getLaunches = async (page: number, limit: number) => {
         body: JSON.stringify({
             query: {},
             options: {
-                sort: { date_unix: "asc" },
+                sort: { date_utc: sort },
                 limit: limit,
                 page: page,
             },
