@@ -51,16 +51,16 @@ const generatePagination = (currentPage: number, totalPagesNumber: number) => {
 const pagination = generatePagination(currentPage, totalPagesNumber);
 ---
 
-<div class="mb-4">
+<div id="missions" class="mb-4">
   <form method="GET" class="flex items-center space-x-4">
     
-    <label for="sort" class="text-white font-medium">Orden:</label>
+    <label for="sort" class="text-white font-medium">Sort:</label>
     <select id="sort" name="sort" class="rounded-lg p-2 bg-gray-800 text-white">
-      <option value="asc" selected={sort === "asc"}>Ascendente</option>
-      <option value="desc" selected={sort === "desc"}>Descendente</option>
+      <option value="asc" selected={sort === "asc"}>Upward</option>
+      <option value="desc" selected={sort === "desc"}>Downward</option>
     </select>
 
-    <label for="limit" class="text-white font-medium">Límite:</label>
+    <label for="limit" class="text-white font-medium">Limit:</label>
     <select id="limit" name="limit" class="rounded-lg p-2 bg-gray-800 text-white">
       <option value="12" selected={limit === 12}>12</option>
       <option value="24" selected={limit === 24}>24</option>
@@ -68,7 +68,7 @@ const pagination = generatePagination(currentPage, totalPagesNumber);
     </select>
 
     <button type="submit" class="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700">
-      Aplicar
+      Apply
     </button>
   </form>
 </div>
