@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { getLaunchById, getLaunches } from "../../services/launches"
+import { YouTube } from 'astro-embed';
 
 const { id } = Astro.params
 
@@ -9,19 +10,19 @@ if (typeof id !== 'string') {
 }
 const launch = await getLaunchById({ id })
 
-
 ---
 <Layout title={launch.name}>
-  <article class="flex items-start space-x-4 border-2 rounded-lg p-8 bg-gray-800 text-white">
-    <section class="mr-[1rem]">
-      <img src={launch?.links?.patch.small} alt={`No hay parche para el ${launch.name}`} class="max-w-[10rem] max-h-[10rem] object-contain"/>
+  <article class=" grid grid-cols-3 items-center space-x-4 border-2 rounded-lg p-8 bg-gray-800 text-white">
+    
+    <section class="mr-[1rem] justify-self-center">
+      <img src={launch?.links?.patch.small} alt={`No hay parche para el ${launch.name}`} class="max-w-[25rem] max-h-[25rem] object-contain"/>
     </section>
-    <aside>
+    <aside class="col-span-2">
       <h2 class="text-4xl text-teal-600 font-bold">{launch.name}</h2>
       <h3 class="text-xl mt-2  font-bold">Flight number: {launch.flight_number}</h3>
       <p class="mt-4 text-lg">{launch?.details || "There are no flight details available."}</p>
-      <section class="mt-4 flex items-center">
-        {launch.links?.webcast && (<a href={launch.links.webcast} target="_blank" class="max-w-[3rem] inline-block ml-3"> <img src="/youtube.svg" alt=""/> </a>)}
+      {launch.links?.webcast && <YouTube id={launch.links.webcast}/>}
+      <section class="mt-4 flex items-end">
         {launch.links?.wikipedia && (<a href={launch.links.wikipedia} target="_blank" class="max-w-[3rem] inline-block ml-3"> <img src="/wikipedia.svg" alt=""/> </a>)}
         {launch.links?.reddit.campaign && (<a href={launch.links.reddit.campaign} target="_blank" class="max-w-[3rem] inline-block ml-3"> <img src="/reddit.svg" alt=""/> </a>)}
         {launch.links?.article && (<a href={launch.links.article} target="_blank" class="max-w-[3rem] inline-block ml-3"> <img src="/presskit.svg" alt=""/> </a>)}

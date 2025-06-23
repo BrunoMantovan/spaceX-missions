@@ -1,0 +1,30 @@
+---
+interface Props{
+  sort: string
+  limit: number
+}
+
+const {sort, limit} = Astro.props
+---
+
+<div id="missions" class="mb-4">
+  <form method="GET" class="flex items-center space-x-4 py-10">
+    
+    <label for="sort" class="text-white font-medium">Sort:</label>
+    <select id="sort" name="sort" class="rounded-lg p-2 bg-gray-800 text-white">
+      <option value="asc" selected={sort === "asc"}>Oldest</option>
+      <option value="desc" selected={sort === "desc"}>Newest</option>
+    </select>
+
+    <label for="limit" class="text-white font-medium">Limit:</label>
+    <select id="limit" name="limit" class="rounded-lg p-2 bg-gray-800 text-white">
+      <option value="12" selected={limit === 12}>12</option>
+      <option value="24" selected={limit === 24}>24</option>
+      <option value="36" selected={limit === 36}>36</option>
+    </select>
+
+    <button type="submit" class="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700">
+      Apply
+    </button>
+  </form>
+</div>

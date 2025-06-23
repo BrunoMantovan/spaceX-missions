@@ -1,9 +1,14 @@
 ---
+/* You can uncomment lines 9 & 24 and commented lines 8 & 23 to use Astro params for pagination, but you will also need to change
+lines 9 & 10 inside /pages/launches/indexedDB.astro */
+import { isRenderInstance } from "astro/runtime/server/render/common.js"
 import {getLaunches, getTotalLaunches} from "../services/launches.ts"
 import CardLaunch from "./CardLaunch.astro";
+import SortComponent from "./SortComponent.astro";
 
 const params = new URLSearchParams(Astro.request.url.split("?")[1])
 const currentPage = parseInt(params.get("page") || "1");
+//const currentPage = parseInt(Astro.params.page || "1"); 
 const limit = parseInt(params.get("limit") || "12");
 const sort = params.get("sort") || "asc"
 
@@ -11,14 +16,14 @@ const [launches, totalPages] = await Promise.all([
   getLaunches(currentPage, limit, sort),
   getTotalLaunches(limit),
 ]);
-
 const totalPagesNumber = totalPages ?? 1;
 
 const nextPage = currentPage + 1; 
 const prevPage = currentPage - 1;
 
 const generateUrl = (page: number, limit: number, sort: string) => {
-  let url = `/?page=${page}&limit=${limit}&sort=${sort}`;
+  let url = `/launches/?page=${page}&limit=${limit}&sort=${sort}`;
+  //let url = `/launches/${page}/?limit=${limit}&sort=${sort}`;
   return url;
 };
 
@@ -51,29 +56,9 @@ const generatePagination = (currentPage: number, totalPagesNumber: number) => {
 const pagination = generatePagination(currentPage, totalPagesNumber);
 ---
 
-<div id="missions" class="mb-4">
-  <form method="GET" class="flex items-center space-x-4">
-    
-    <label for="sort" class="text-white font-medium">Sort:</label>
-    <select id="sort" name="sort" class="rounded-lg p-2 bg-gray-800 text-white">
-      <option value="asc" selected={sort === "asc"}>Upward</option>
-      <option value="desc" selected={sort === "desc"}>Downward</option>
-    </select>
+<SortComponent limit={limit} sort={sort} />
 
-    <label for="limit" class="text-white font-medium">Limit:</label>
-    <select id="limit" name="limit" class="rounded-lg p-2 bg-gray-800 text-white">
-      <option value="12" selected={limit === 12}>12</option>
-      <option value="24" selected={limit === 24}>24</option>
-      <option value="36" selected={limit === 36}>36</option>
-    </select>
-
-    <button type="submit" class="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700">
-      Apply
-    </button>
-  </form>
-</div>
-
-<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+<div class="grid gap-8 sm:grid-cols-3 lg:grid-cols-4">
   {launches.map(launch => (
       <CardLaunch id={launch.id} img={launch.links.patch.small || launch.links.patch.large} details={launch.details} name={launch.name} success={launch.success} />
   ))}

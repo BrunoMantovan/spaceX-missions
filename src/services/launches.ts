@@ -1,4 +1,5 @@
 import {type Doc, type APIResponseSpaceX} from "../types/api.ts";
+import {type APIResponseSpaceXCrew} from "../types/crewApi.ts";
 
 export const getLaunches = async (page: number, limit: number, sort: string) => {
     const res = await fetch("https://api.spacexdata.com/v5/launches/query", {
@@ -15,7 +16,7 @@ export const getLaunches = async (page: number, limit: number, sort: string) => 
             },
         }),
     })
-    const {docs: launches} = await res.json() as APIResponseSpaceX;    
+    const {docs: launches} = await res.json() as APIResponseSpaceX;
     return launches
 }
 
@@ -32,4 +33,25 @@ export const getTotalLaunches = async (limit: number) => {
             return Math.ceil(launches.length / limit);
         }
     return null;
+}
+
+export const getCrew = async (limit: number, page: number = 1) => {
+    const res = await fetch("https://api.spacexdata.com/v4/crew/query", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            query: {},
+            options: {
+                limit,
+                page,
+            },
+        }),
+    });
+    const data = JSON.stringify(await res.json());
+    console.log(data);
+    
+    const {docs: crew} = await res.json() as APIResponseSpaceXCrew;
+    return crew
 }

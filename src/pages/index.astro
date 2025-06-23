@@ -1,5 +1,6 @@
 ---
 import CallToAction from "../components/CallToAction.astro";
+import HeroSection from "../components/HeroSection.astro";
 import Launches from "../components/Launches.astro";
 import Layout from "../layouts/Layout.astro";
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
@@ -7,6 +8,6 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="SpaceX Launches">
-  <CallToAction/>
+  <HeroSection />
   <Launches currentPage={1} />
 </Layout>

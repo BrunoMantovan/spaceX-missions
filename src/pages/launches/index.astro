@@ -1,0 +1,11 @@
+---
+import Launches from "../../components/Launches.astro";
+import Layout from "../../layouts/Layout.astro";
+const { page} = Astro.params;
+console.log("pageparam", page);
+
+---
+<Layout title="SpaceX Launches">
+  <Launches />
+  <Launches currentPage={1}/>
+</Layout>

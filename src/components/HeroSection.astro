@@ -1,0 +1,25 @@
+---
+import CallToAction from "./CallToAction.astro";
+
+
+---
+
+<section class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center mb-[5rem]">
+    <article class="grid h-full justify-items-center mb-[1rem] md:mb-[5rem]">
+        <section class="self-center">
+            <a href="/">
+                <h1 class="mb-4 md:text-5xl tracking-tight font-extrabold text-teal-600">
+                    SpaceX miniWiki🚀
+                </h1>
+            </a>
+            <h3 class="text-gray-500 text-2xl md:text-3xl dark:text-gray-400 font-bold pt-6"> They are out exploring the universe, so we can build a better future.</h3>
+            <h2 class="font-semibold text-gray-500 text-xl md:text-2xl dark:text-gray-400 pt-2">All the information of SpaceX missions is here.</h2>
+        </section>
+    </article>
+    <aside>
+        <img src="/hero-image.avif" alt="" class="rounded-full aspect-square w-full object-fit shadow-md shadow-gray-500/50">
+    </aside>
+    <footer class="self-end pb-[2rem] col-span-1 md:col-span-2 mt-6">
+        <CallToAction/>
+    </footer>
+</section>
