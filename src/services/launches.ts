@@ -1,5 +1,6 @@
 import {type Doc, type APIResponseSpaceX} from "../types/api.ts";
 import {type APIResponseSpaceXCrew} from "../types/crewApi.ts";
+import {type PayloadDoc} from "../types/payloadsApi.ts";
 
 export const getLaunches = async (page: number, limit: number, sort: string) => {
     const res = await fetch("https://api.spacexdata.com/v5/launches/query", {
@@ -54,4 +55,11 @@ export const getCrew = async (limit: number, page: number = 1) => {
     
     const {docs: crew} = await res.json() as APIResponseSpaceXCrew;
     return crew
+}
+
+export const getPayloads = async (id: string) => {
+    const res = await fetch(`https://api.spacexdata.com/v4/payloads/${id}`);
+    
+    const payload = (await res.json()) as PayloadDoc;
+    return payload;
 }
