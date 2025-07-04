@@ -6,27 +6,33 @@ interface Props{
     name: string
     details: string | null
     minimal: boolean
+    endpoint: string
+    agency: any
 }
 
-const {success, name, img, id, minimal } = Astro.props
+const {success, name, img, id, minimal, endpoint, agency } = Astro.props
 ---
 
-<a href={`/launch/${id}`} class="rounded-lg border shadow-md bg-gray-800 border-gray-700 hover:scale-105 hover:bg-gray-700 hover:border-gray-500 transition flex flex-col">
+<a href={`/${endpoint}/${id}`} class="rounded-lg border shadow-md bg-gray-800 border-gray-700 hover:scale-105 hover:bg-gray-700 hover:border-gray-500 transition flex flex-col">
     <picture class="flex justify-center p-4">
-        <img class="mb-5 rounded-lg max-w-[14rem]" src={img ? img : "/Spacex-Circle-Logo.webp"} alt={`There is no patch for this mision.`}>
+        <img class="mb-5 rounded-lg max-w-[14rem] max-h-44" src={img ? img : "/Spacex-Circle-Logo.webp"} alt={`There is no patch for this mision.`}>
     </picture>
     {minimal ? (
         <header class="p-4 flex-grow">
             <h2 class="my-2 text-2xl font-bold tracking-tight text-white">{name}</h2>
             <div class="flex items-center gap-3 mb-4">
-                <p class="">Launch status </p>
-                <span class:list={[
-                    "w-3 h-3 rounded-full animate-pulse inline-block",
-                    {
-                        "bg-green-500": success,
-                        "bg-red-500": !success
-                    }
-                ]}></span>
+                <p class="">{agency ? agency : "Launch status"} </p>
+                {
+                    agency ? (
+                        <span class:list={[
+                            "w-3 h-3 rounded-full animate-pulse inline-block",
+                            {
+                                "bg-green-500": success,
+                                "bg-red-500": !success
+                            }
+                        ]}></span>
+                    ) : null
+                }
             </div>        
         </header>) : null
     }

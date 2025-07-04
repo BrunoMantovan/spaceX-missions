@@ -1,5 +1,6 @@
 ---
 import CallToAction from "../components/CallToAction.astro";
+import CrewBar from "../components/CrewBar.astro";
 import HeroSection from "../components/HeroSection.astro";
 import Launches from "../components/Launches.astro";
 import MissionBar from "../components/MissionBar.astro";
@@ -10,5 +11,7 @@ import Layout from "../layouts/Layout.astro";
 
 <Layout title="SpaceX Launches">
   <HeroSection />
+  <div id="missions"></div>
   <MissionBar/>
+  <CrewBar/>
 </Layout>

@@ -1,0 +1,17 @@
+---
+import CardLaunch from "./CardLaunch.astro";
+import {getCrew} from "../services/launches.ts"
+const crewArray = await getCrew(1, 4)
+---
+
+<section class="grid gap-8 lg:grid-cols-5 mt-8" >
+    {crewArray.map(crew => (
+      <CardLaunch id={crew.id} img={crew.image} name={crew.name} details={""} success={false} agency={crew.agency} minimal={false} endpoint="crew"/>
+  ))}
+  <aside class="self-center  max-h-[50%]">
+    <a href="/crew" class="text-teal-600 font-bold text-3xl text-center flex items-center justify-end">Go to crew
+        <img class="max-h-24" src="/public/go-previous-rtl-symbolic-svgrepo-com.svg" alt="">
+    </a>
+    
+  </aside>
+</section>

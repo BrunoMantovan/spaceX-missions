@@ -59,7 +59,7 @@ const pagination = generatePagination(currentPage, totalPagesNumber);
 
 <div class="grid gap-8 sm:grid-cols-3 lg:grid-cols-4">
   {launches.map(launch => (
-      <CardLaunch minimal={true} id={launch.id} img={launch.links.patch.small || launch.links.patch.large} details={launch.details} name={launch.name} success={launch.success} />
+      <CardLaunch minimal={true} id={launch.id} img={launch.links.patch.small || launch.links.patch.large} details={launch.details} name={launch.name} success={launch.success} endpoint="launch" agency={null}/>
   ))}
 </div>
 <div class="flex gap-2 mt-4 justify-center items-center">

@@ -4,9 +4,9 @@ import {getLaunches} from "../services/launches.ts"
 const launches = await getLaunches(1, 4, "asc")
 ---
 
-<section class="grid gap-8 lg:grid-cols-5">
+<section class="grid gap-8 lg:grid-cols-5" >
     {launches.map(launch => (
-      <CardLaunch id={launch.id} img={launch.links.patch.small || launch.links.patch.large} details={launch.details} name={launch.name} success={launch.success} minimal={false}/>
+      <CardLaunch id={launch.id} img={launch.links.patch.small || launch.links.patch.large} details={launch.details} name={launch.name} success={launch.success} minimal={false} endpoint="launch" agency={null}/>
   ))}
   <aside class="self-center  max-h-[50%]">
     <a href="/launches" class="text-teal-600 font-bold text-3xl text-center flex items-center justify-end">Go to launches

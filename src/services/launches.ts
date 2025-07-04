@@ -36,7 +36,7 @@ export const getTotalLaunches = async (limit: number) => {
     return null;
 }
 
-export const getCrew = async (limit: number, page: number = 1) => {
+export const getCrew = async (page: number = 1, limit: number) => {
     const res = await fetch("https://api.spacexdata.com/v4/crew/query", {
         method: "POST",
         headers: {
@@ -50,8 +50,6 @@ export const getCrew = async (limit: number, page: number = 1) => {
             },
         }),
     });
-    const data = JSON.stringify(await res.json());
-    console.log(data);
     
     const {docs: crew} = await res.json() as APIResponseSpaceXCrew;
     return crew
